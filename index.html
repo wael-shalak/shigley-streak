@@ -303,11 +303,6 @@ footer strong { color: var(--gold); }
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <script>
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// STEP 1: Paste your Firebase config here
-// Replace the entire object below with YOUR config
-// from Firebase Console → Project Settings → Your apps
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const firebaseConfig = {
   apiKey: "AIzaSyAhzGueprQF1L9UVEu-I91dlFuOvDuea_c",
   authDomain: "shigleys-streak.firebaseapp.com",
@@ -318,16 +313,6 @@ const firebaseConfig = {
   appId: "1:318862340740:web:6737b60b2f255a14cbc8d1",
   measurementId: "G-LT98PRNW39"
 };
-// Example of what it should look like after you paste:
-// const firebaseConfig = {
-//   apiKey: "AIzaSy...",
-//   authDomain: "your-app.firebaseapp.com",
-//   databaseURL: "https://your-app-default-rtdb.firebaseio.com",
-//   projectId: "your-app",
-//   storageBucket: "your-app.appspot.com",
-//   messagingSenderId: "123456789",
-//   appId: "1:123:web:abc123"
-// };
 
 const PASSWORD = "ana-elshigleyy";
 const RANKS = [
@@ -354,18 +339,19 @@ let pendingAction = null;
 
 // ── FIREBASE INIT ──
 function initFirebase() {
-  if (typeof firebaseConfig !== 'object' || firebaseConfig === "PASTE_YOUR_FIREBASE_CONFIG_HERE") {
+  if (typeof firebaseConfig !== 'object' || firebaseConfig.apiKey.startsWith("PASTE_YOUR")) {
     setSyncStatus('error', 'Local only — add Firebase config');
-    document.getElementById('setup-banner').classList.remove('hidden');
     loadLocal();
     return;
   }
   try {
     firebase.initializeApp(firebaseConfig);
     db = firebase.database();
-    document.getElementById('setup-banner').classList.add('hidden');
+    
     setSyncStatus('syncing', 'Connecting...');
-    db.ref('shigley/state').on('value', snap => {
+    
+    // Explicit chained structural mapping targeting custom database regions securely
+    db.ref().child('shigley').child('state').on('value', snap => {
       const val = snap.val();
       if (val) {
         state = { filter: state.filter, ...val };
@@ -373,12 +359,13 @@ function initFirebase() {
       setSyncStatus('synced', 'Synced');
       render();
     }, err => {
+      console.error("Firebase Read Error:", err);
       setSyncStatus('error', 'Sync error');
       loadLocal();
     });
   } catch(e) {
+    console.error("Firebase Init Error:", e);
     setSyncStatus('error', 'Config error');
-    document.getElementById('setup-banner').classList.remove('hidden');
     loadLocal();
   }
 }
@@ -387,9 +374,16 @@ function saveToFirebase() {
   if (!db) { saveLocal(); return; }
   setSyncStatus('syncing', 'Saving...');
   const { filter, ...toSave } = state;
-  db.ref('shigley/state').set(toSave)
-    .then(() => setSyncStatus('synced', 'Saved'))
-    .catch(() => { setSyncStatus('error', 'Save failed'); saveLocal(); });
+  
+  db.ref().child('shigley').child('state').set(toSave)
+    .then(() => {
+      setSyncStatus('synced', 'Saved');
+    })
+    .catch(error => { 
+      console.error("Firebase Write Error:", error);
+      setSyncStatus('error', 'Save failed'); 
+      saveLocal(); 
+    });
 }
 
 function setSyncStatus(status, label) {
