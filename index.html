@@ -100,16 +100,6 @@ input[type="password"].wrong { border-color: var(--red) !important; animation: s
 .btn-full:hover { opacity: 0.9; }
 .btn-cancel { background: transparent; color: var(--text-muted); border: 1px solid var(--border-bright); margin-top: 8px; }
 
-/* FIREBASE SETUP BANNER */
-.setup-banner { background: #0a1a0a; border: 1px solid #1bc47d44; border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; display: flex; align-items: flex-start; gap: 12px; }
-.setup-banner.hidden { display: none; }
-.setup-icon { font-size: 22px; flex-shrink: 0; }
-.setup-text { flex: 1; }
-.setup-title { font-size: 14px; font-weight: 600; color: var(--green); margin-bottom: 4px; }
-.setup-body { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
-.setup-body code { background: #0d0f1a; color: var(--gold); padding: 1px 5px; border-radius: 4px; font-size: 11px; }
-.setup-body a { color: var(--blue-bright); }
-
 /* CHART */
 .chart-bars { display: flex; align-items: flex-end; gap: 5px; height: 100px; padding-bottom: 24px; position: relative; }
 .chart-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end; position: relative; }
@@ -165,7 +155,6 @@ footer strong { color: var(--gold); }
 </head>
 <body>
 
-<!-- PASSWORD MODAL -->
 <div class="modal-backdrop hidden" id="pw-modal">
   <div class="modal-box">
     <div class="modal-icon" id="pw-modal-icon">🔒</div>
@@ -198,7 +187,6 @@ footer strong { color: var(--gold); }
   </div>
 </header>
 
-<!-- HERO -->
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-grid-lines"></div>
@@ -298,7 +286,6 @@ footer strong { color: var(--gold); }
 <footer>Built for <strong>Shigley</strong> &mdash; the greatest pacifist Fortnite has ever seen.</footer>
 <div id="toast"></div>
 
-<!-- FIREBASE SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
@@ -347,10 +334,9 @@ function initFirebase() {
   try {
     firebase.initializeApp(firebaseConfig);
     db = firebase.database();
-    
     setSyncStatus('syncing', 'Connecting...');
     
-    // Explicit chained structural mapping targeting custom database regions securely
+    // Explicit chained absolute path definition matching your custom Firebase region structure
     db.ref().child('shigley').child('state').on('value', snap => {
       const val = snap.val();
       if (val) {
@@ -364,7 +350,7 @@ function initFirebase() {
       loadLocal();
     });
   } catch(e) {
-    console.error("Firebase Init Error:", e);
+    console.error("Firebase Init Crash:", e);
     setSyncStatus('error', 'Config error');
     loadLocal();
   }
@@ -379,18 +365,19 @@ function saveToFirebase() {
     .then(() => {
       setSyncStatus('synced', 'Saved');
     })
-    .catch(error => { 
+    .catch((error) => { 
       console.error("Firebase Write Error:", error);
       setSyncStatus('error', 'Save failed'); 
       saveLocal(); 
     });
 }
 
+// ── SYNCHRONIZATION HELPERS ──
 function setSyncStatus(status, label) {
   const dot = document.getElementById('sync-dot');
   const lbl = document.getElementById('sync-label');
-  dot.className = 'sync-dot ' + status;
-  lbl.textContent = label;
+  if(dot) dot.className = 'sync-dot ' + status;
+  if(lbl) lbl.textContent = label;
 }
 
 function loadLocal() {
