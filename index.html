@@ -8,552 +8,179 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
-  --gold: #FFD700;
-  --gold-dim: #C9A800;
-  --gold-dark: #3D2E00;
-  --blue-bright: #00D4FF;
-  --bg: #080b14;
-  --bg-card: #0e1220;
-  --bg-card2: #121828;
-  --border: #1c2340;
-  --border-bright: #2a3560;
-  --text: #f0f2ff;
-  --text-muted: #6b7799;
-  --text-dim: #3a4265;
-  --green: #1bc47d;
-  --green-dark: #0a3d25;
-  --red: #e84142;
-  --red-dark: #3d0a0a;
-  --purple: #7c5cbf;
+  --gold: #FFD700; --gold-dim: #C9A800; --gold-dark: #3D2E00;
+  --blue-bright: #00D4FF; --bg: #080b14; --bg-card: #0e1220;
+  --border: #1c2340; --border-bright: #2a3560;
+  --text: #f0f2ff; --text-muted: #6b7799; --text-dim: #3a4265;
+  --green: #1bc47d; --green-dark: #0a3d25;
+  --red: #e84142; --red-dark: #3d0a0a;
 }
-
 html { scroll-behavior: smooth; }
+body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.5; }
 
-body {
-  font-family: 'Barlow', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  line-height: 1.5;
-}
-
-/* ── HEADER ── */
-header {
-  border-bottom: 1px solid var(--border);
-  padding: 0 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 60px;
-  position: sticky;
-  top: 0;
-  background: rgba(8,11,20,0.92);
-  backdrop-filter: blur(12px);
-  z-index: 100;
-}
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--gold);
-  letter-spacing: 0.5px;
-  text-decoration: none;
-}
-.logo-star {
-  width: 28px; height: 28px;
-}
-.nav-links {
-  display: flex;
-  gap: 2rem;
-  list-style: none;
-}
-.nav-links a {
-  font-size: 13px;
-  color: var(--text-muted);
-  text-decoration: none;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  font-weight: 600;
-  transition: color 0.2s;
-}
+/* HEADER */
+header { border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 60px; position: sticky; top: 0; background: rgba(8,11,20,0.93); backdrop-filter: blur(12px); z-index: 100; }
+.logo { display: flex; align-items: center; gap: 10px; font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 700; color: var(--gold); letter-spacing: 0.5px; text-decoration: none; }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a { font-size: 13px; color: var(--text-muted); text-decoration: none; letter-spacing: 0.5px; text-transform: uppercase; font-weight: 600; transition: color 0.2s; }
 .nav-links a:hover { color: var(--gold); }
+.sync-indicator { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.5px; }
+.sync-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text-dim); transition: background 0.3s; }
+.sync-dot.synced { background: var(--green); }
+.sync-dot.syncing { background: var(--gold); animation: pulse 1s infinite; }
+.sync-dot.error { background: var(--red); }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
-/* ── HERO ── */
-.hero {
-  position: relative;
-  text-align: center;
-  padding: 5rem 1.5rem 4rem;
-  overflow: hidden;
-}
-.hero-bg {
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse 60% 50% at 50% 0%, rgba(255,215,0,0.06) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 30% at 20% 100%, rgba(0,212,255,0.04) 0%, transparent 60%);
-  pointer-events: none;
-}
-.hero-grid-lines {
-  position: absolute; inset: 0;
-  background-image:
-    linear-gradient(var(--border) 1px, transparent 1px),
-    linear-gradient(90deg, var(--border) 1px, transparent 1px);
-  background-size: 60px 60px;
-  opacity: 0.3;
-  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%);
-  pointer-events: none;
-}
-.hero-eyebrow {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 1rem;
-}
-.hero-title {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: clamp(3rem, 8vw, 6rem);
-  font-weight: 800;
-  line-height: 0.95;
-  color: var(--gold);
-  text-transform: uppercase;
-  letter-spacing: -1px;
-  margin-bottom: 0.5rem;
-}
+/* HERO */
+.hero { position: relative; text-align: center; padding: 5rem 1.5rem 4rem; overflow: hidden; }
+.hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(255,215,0,0.06) 0%, transparent 70%), radial-gradient(ellipse 40% 30% at 20% 100%, rgba(0,212,255,0.04) 0%, transparent 60%); pointer-events: none; }
+.hero-grid-lines { position: absolute; inset: 0; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 60px 60px; opacity: 0.3; mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%); pointer-events: none; }
+.hero-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 1rem; }
+.hero-title { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(3rem, 8vw, 6rem); font-weight: 800; line-height: 0.95; color: var(--gold); text-transform: uppercase; letter-spacing: -1px; margin-bottom: 0.5rem; }
 .hero-title span { color: var(--text); }
-.hero-sub {
-  font-size: 15px;
-  color: var(--text-muted);
-  max-width: 400px;
-  margin: 0 auto 2rem;
-}
-.hero-streak-display {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  background: var(--bg-card);
-  border: 1px solid var(--border-bright);
-  border-radius: 16px;
-  padding: 2rem 3rem;
-  position: relative;
-}
-.hero-streak-display::before {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: 16px;
-  border: 1px solid transparent;
-  background: linear-gradient(135deg, var(--gold) 0%, transparent 50%) border-box;
-  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: destination-out;
-  mask-composite: exclude;
-}
-.hero-streak-label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 4px;
-}
-.hero-streak-num {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 100px;
-  font-weight: 800;
-  color: var(--gold);
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-  transition: transform 0.2s;
-}
+.hero-sub { font-size: 15px; color: var(--text-muted); max-width: 400px; margin: 0 auto 2rem; }
+.hero-streak-display { display: inline-flex; flex-direction: column; align-items: center; background: var(--bg-card); border: 1px solid var(--border-bright); border-radius: 16px; padding: 2rem 3rem; position: relative; }
+.hero-streak-display::before { content: ''; position: absolute; inset: -1px; border-radius: 16px; border: 1px solid transparent; background: linear-gradient(135deg, var(--gold) 0%, transparent 50%) border-box; -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); -webkit-mask-composite: destination-out; mask-composite: exclude; }
+.hero-streak-label { font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; }
+.hero-streak-num { font-family: 'Barlow Condensed', sans-serif; font-size: 100px; font-weight: 800; color: var(--gold); line-height: 1; font-variant-numeric: tabular-nums; transition: transform 0.2s; }
 .hero-streak-num.bump { transform: scale(1.08); }
 .hero-streak-unit { font-size: 13px; color: var(--text-muted); }
-.rank-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 1rem;
-  padding: 5px 14px;
-  border-radius: 30px;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  border: 1px solid;
-}
+.rank-badge { display: inline-flex; align-items: center; gap: 6px; margin-top: 1rem; padding: 5px 14px; border-radius: 30px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px; border: 1px solid; }
 .rank-gold { background: var(--gold-dark); color: var(--gold); border-color: var(--gold-dim); }
 .rank-blue { background: #042C53; color: #85B7EB; border-color: #185FA5; }
 .rank-gray { background: #1a1f2e; color: var(--text-muted); border-color: var(--border-bright); }
 .rank-green { background: var(--green-dark); color: var(--green); border-color: #0f6e56; }
+.progress-section { max-width: 500px; margin: 1.5rem auto 0; text-align: left; }
+.progress-meta { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-bottom: 6px; }
+.progress-track { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--gold); border-radius: 3px; transition: width 0.5s cubic-bezier(0.4,0,0.2,1); }
 
-/* ── PROGRESS BAR ── */
-.progress-section {
-  max-width: 500px;
-  margin: 1.5rem auto 0;
-  text-align: left;
-}
-.progress-meta {
-  display: flex;
-  justify-content: space-between;
-  font-size: 11px;
-  color: var(--text-muted);
-  margin-bottom: 6px;
-}
-.progress-track {
-  height: 6px;
-  background: var(--border);
-  border-radius: 3px;
-  overflow: hidden;
-}
-.progress-fill {
-  height: 100%;
-  background: var(--gold);
-  border-radius: 3px;
-  transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
-}
-
-/* ── MAIN LAYOUT ── */
-main {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem 4rem;
-}
-
-/* ── STATS ROW ── */
-.stats-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 12px;
-  margin-bottom: 2rem;
-}
-.stat-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.stat-card-icon {
-  font-size: 20px;
-  margin-bottom: 2px;
-}
-.stat-card-val {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 36px;
-  font-weight: 700;
-  color: var(--text);
-  line-height: 1;
-}
-.stat-card-lbl {
-  font-size: 12px;
-  color: var(--text-muted);
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
+/* MAIN */
+main { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+.stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 2rem; }
+.stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; display: flex; flex-direction: column; gap: 6px; }
+.stat-card-icon { font-size: 20px; margin-bottom: 2px; }
+.stat-card-val { font-family: 'Barlow Condensed', sans-serif; font-size: 36px; font-weight: 700; color: var(--text); line-height: 1; }
+.stat-card-lbl { font-size: 12px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
 .stat-card.accent-gold .stat-card-val { color: var(--gold); }
 .stat-card.accent-green .stat-card-val { color: var(--green); }
 .stat-card.accent-red .stat-card-val { color: var(--red); }
 .stat-card.accent-blue .stat-card-val { color: var(--blue-bright); }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 2rem; }
+@media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } .nav-links { display: none; } }
+.card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 1.5rem; }
+.card-title { font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 8px; }
 
-/* ── TWO COLUMNS ── */
-.two-col {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 2rem;
-}
-@media (max-width: 700px) {
-  .two-col { grid-template-columns: 1fr; }
-  .nav-links { display: none; }
-}
-
-/* ── CARD ── */
-.card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 1.5rem;
-}
-.card-title {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 15px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: var(--text-muted);
-  margin-bottom: 1.25rem;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-/* ── LOG FORM ── */
-.form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 14px;
-}
-.field-label {
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  color: var(--text-muted);
-  margin-bottom: 5px;
-}
-select, input[type="text"] {
-  width: 100%;
-  background: var(--bg);
-  border: 1px solid var(--border-bright);
-  color: var(--text);
-  border-radius: 8px;
-  padding: 9px 12px;
-  font-size: 13px;
-  font-family: 'Barlow', sans-serif;
-  outline: none;
-  transition: border-color 0.2s;
-  appearance: none;
-  -webkit-appearance: none;
-  cursor: pointer;
-}
-select:focus, input[type="text"]:focus { border-color: var(--gold); }
+/* FORM */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.field-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); margin-bottom: 5px; }
+select, input[type="text"], input[type="password"] { width: 100%; background: var(--bg); border: 1px solid var(--border-bright); color: var(--text); border-radius: 8px; padding: 9px 12px; font-size: 13px; font-family: 'Barlow', sans-serif; outline: none; transition: border-color 0.2s; appearance: none; -webkit-appearance: none; cursor: pointer; }
+select:focus, input[type="text"]:focus, input[type="password"]:focus { border-color: var(--gold); }
+input[type="password"].wrong { border-color: var(--red) !important; animation: shake 0.3s; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
 .btn-row { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; }
-.btn {
-  padding: 12px 16px;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 600;
-  font-family: 'Barlow Condensed', sans-serif;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  cursor: pointer;
-  border: 1px solid;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  transition: transform 0.1s, opacity 0.1s;
-}
+.btn { padding: 12px 16px; border-radius: 10px; font-size: 14px; font-weight: 600; font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.5px; text-transform: uppercase; cursor: pointer; border: 1px solid; display: flex; align-items: center; justify-content: center; gap: 7px; transition: transform 0.1s, opacity 0.1s; }
 .btn:active { transform: scale(0.97); }
-.btn-gold {
-  background: var(--gold);
-  color: #080b14;
-  border-color: var(--gold);
-}
+.btn-gold { background: var(--gold); color: #080b14; border-color: var(--gold); }
 .btn-gold:hover { opacity: 0.9; }
-.btn-red {
-  background: transparent;
-  color: var(--red);
-  border-color: var(--red);
-}
+.btn-red { background: transparent; color: var(--red); border-color: var(--red); }
 .btn-red:hover { background: rgba(232,65,66,0.08); }
 
-/* ── CHART ── */
-.chart-bars {
-  display: flex;
-  align-items: flex-end;
-  gap: 5px;
-  height: 100px;
-  padding-bottom: 24px;
-  position: relative;
-}
-.chart-bar-wrap {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
-  justify-content: flex-end;
-  position: relative;
-}
-.chart-bar {
-  width: 100%;
-  border-radius: 4px 4px 0 0;
-  min-height: 4px;
-  transition: height 0.4s ease;
-  position: relative;
-}
+/* PASSWORD MODAL */
+.modal-backdrop { position: fixed; inset: 0; background: rgba(8,11,20,0.85); backdrop-filter: blur(6px); z-index: 500; display: flex; align-items: center; justify-content: center; }
+.modal-backdrop.hidden { display: none; }
+.modal-box { background: var(--bg-card); border: 1px solid var(--border-bright); border-radius: 16px; padding: 2rem; width: 100%; max-width: 360px; text-align: center; }
+.modal-icon { font-size: 36px; margin-bottom: 12px; }
+.modal-title { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 700; color: var(--gold); margin-bottom: 6px; }
+.modal-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 1.25rem; }
+.modal-box input { margin-bottom: 10px; }
+.modal-error { font-size: 12px; color: var(--red); margin-bottom: 8px; min-height: 16px; }
+.btn-full { width: 100%; padding: 12px; border-radius: 10px; font-size: 15px; font-weight: 700; font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.5px; text-transform: uppercase; cursor: pointer; border: none; background: var(--gold); color: #080b14; transition: opacity 0.15s; }
+.btn-full:hover { opacity: 0.9; }
+.btn-cancel { background: transparent; color: var(--text-muted); border: 1px solid var(--border-bright); margin-top: 8px; }
+
+/* FIREBASE SETUP BANNER */
+.setup-banner { background: #0a1a0a; border: 1px solid #1bc47d44; border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; display: flex; align-items: flex-start; gap: 12px; }
+.setup-banner.hidden { display: none; }
+.setup-icon { font-size: 22px; flex-shrink: 0; }
+.setup-text { flex: 1; }
+.setup-title { font-size: 14px; font-weight: 600; color: var(--green); margin-bottom: 4px; }
+.setup-body { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+.setup-body code { background: #0d0f1a; color: var(--gold); padding: 1px 5px; border-radius: 4px; font-size: 11px; }
+.setup-body a { color: var(--blue-bright); }
+
+/* CHART */
+.chart-bars { display: flex; align-items: flex-end; gap: 5px; height: 100px; padding-bottom: 24px; position: relative; }
+.chart-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end; position: relative; }
+.chart-bar { width: 100%; border-radius: 4px 4px 0 0; min-height: 4px; position: relative; }
 .chart-bar.type-clean { background: var(--gold); }
 .chart-bar.type-kill { background: var(--red); }
-.chart-bar-lbl {
-  position: absolute;
-  bottom: -20px;
-  font-size: 10px;
-  color: var(--text-muted);
-  white-space: nowrap;
-}
-.chart-legend {
-  display: flex;
-  gap: 16px;
-  margin-top: 6px;
-}
-.legend-dot {
-  width: 10px; height: 10px;
-  border-radius: 2px;
-  display: inline-block;
-  margin-right: 5px;
-}
+.chart-bar-lbl { position: absolute; bottom: -20px; font-size: 10px; color: var(--text-muted); white-space: nowrap; }
+.chart-legend { display: flex; gap: 16px; margin-top: 6px; }
+.legend-dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; margin-right: 5px; }
 
-/* ── LOG LIST ── */
-.log-filters {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 1rem;
-  flex-wrap: wrap;
-}
-.filter-pill {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  padding: 4px 12px;
-  border-radius: 20px;
-  border: 1px solid var(--border-bright);
-  background: transparent;
-  color: var(--text-muted);
-  cursor: pointer;
-  transition: all 0.15s;
-}
-.filter-pill.active {
-  background: var(--gold);
-  color: #080b14;
-  border-color: var(--gold);
-}
-.log-entry {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--border);
-  transition: background 0.1s;
-}
+/* LOG */
+.log-filters { display: flex; gap: 6px; margin-bottom: 1rem; flex-wrap: wrap; }
+.filter-pill { font-size: 11px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border-bright); background: transparent; color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
+.filter-pill.active { background: var(--gold); color: #080b14; border-color: var(--gold); }
+.log-entry { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
 .log-entry:last-child { border-bottom: none; }
-.log-icon-wrap {
-  width: 36px; height: 36px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  flex-shrink: 0;
-}
-.log-icon-clean { background: var(--green-dark); color: var(--green); }
-.log-icon-kill { background: var(--red-dark); color: var(--red); }
+.log-icon-wrap { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.log-icon-clean { background: var(--green-dark); }
+.log-icon-kill { background: var(--red-dark); }
 .log-body { flex: 1; }
 .log-main-text { font-size: 14px; font-weight: 600; color: var(--text); }
 .log-meta-text { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
 .log-right { text-align: right; flex-shrink: 0; }
-.log-streak-num {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--gold);
-}
+.log-streak-num { font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 700; color: var(--gold); }
 .log-match-num { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-.placement-tag {
-  font-size: 10px;
-  font-weight: 600;
-  padding: 2px 7px;
-  border-radius: 10px;
-  display: inline-block;
-  margin-top: 3px;
-  border: 1px solid;
-}
+.placement-tag { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 10px; display: inline-block; margin-top: 3px; border: 1px solid; }
 .tag-vr { background: var(--gold-dark); color: var(--gold); border-color: var(--gold-dim); }
 .tag-top { background: var(--green-dark); color: var(--green); border-color: #0f6e56; }
 .tag-other { background: #1a1f2e; color: var(--text-muted); border-color: var(--border-bright); }
 
-/* ── MILESTONES ── */
-.milestone-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 11px 0;
-  border-bottom: 1px solid var(--border);
-  transition: opacity 0.3s;
-}
+/* MILESTONES */
+.milestone-item { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--border); transition: opacity 0.3s; }
 .milestone-item:last-child { border-bottom: none; }
 .milestone-item.locked { opacity: 0.35; }
-.ms-icon-wrap {
-  width: 36px; height: 36px;
-  border-radius: 8px;
-  border: 1px solid;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  flex-shrink: 0;
-}
-.ms-unlocked { background: var(--gold-dark); border-color: var(--gold-dim); color: var(--gold); }
-.ms-locked { background: #1a1f2e; border-color: var(--border-bright); color: var(--text-muted); }
+.ms-icon-wrap { width: 36px; height: 36px; border-radius: 8px; border: 1px solid; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.ms-unlocked { background: var(--gold-dark); border-color: var(--gold-dim); }
+.ms-locked { background: #1a1f2e; border-color: var(--border-bright); }
 .ms-name { font-size: 14px; font-weight: 600; color: var(--text); }
 .ms-req { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
 .ms-check { margin-left: auto; font-size: 18px; }
 .ms-check.done { color: var(--green); }
 .ms-check.todo { color: var(--text-dim); }
 
-/* ── TOAST ── */
-#toast {
-  position: fixed;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%) translateY(20px);
-  background: var(--gold);
-  color: #080b14;
-  font-size: 13px;
-  font-weight: 700;
-  font-family: 'Barlow Condensed', sans-serif;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  padding: 10px 22px;
-  border-radius: 30px;
-  opacity: 0;
-  transition: opacity 0.25s, transform 0.25s;
-  pointer-events: none;
-  z-index: 999;
-  white-space: nowrap;
-}
-#toast.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
+/* TOAST */
+#toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--gold); color: #080b14; font-size: 13px; font-weight: 700; font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.5px; text-transform: uppercase; padding: 10px 22px; border-radius: 30px; opacity: 0; transition: opacity 0.25s, transform 0.25s; pointer-events: none; z-index: 999; white-space: nowrap; }
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-/* ── FOOTER ── */
-footer {
-  text-align: center;
-  padding: 2rem;
-  border-top: 1px solid var(--border);
-  font-size: 12px;
-  color: var(--text-dim);
-  letter-spacing: 0.5px;
-}
+footer { text-align: center; padding: 2rem; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-dim); letter-spacing: 0.5px; }
 footer strong { color: var(--gold); }
-
-/* ── EMPTY STATE ── */
-.empty-state {
-  text-align: center;
-  padding: 2rem 1rem;
-  color: var(--text-muted);
-  font-size: 13px;
-}
+.empty-state { text-align: center; padding: 2rem 1rem; color: var(--text-muted); font-size: 13px; }
 .empty-icon { font-size: 32px; margin-bottom: 8px; opacity: 0.4; }
-
-/* ── ICONS via inline SVG ── */
-.icon { display: inline-block; width: 1em; height: 1em; vertical-align: -0.12em; }
 </style>
 </head>
 <body>
 
+<!-- PASSWORD MODAL -->
+<div class="modal-backdrop hidden" id="pw-modal">
+  <div class="modal-box">
+    <div class="modal-icon" id="pw-modal-icon">🔒</div>
+    <div class="modal-title" id="pw-modal-title">Enter password</div>
+    <div class="modal-sub" id="pw-modal-sub">Only Shigley can log matches.</div>
+    <input type="password" id="pw-input" placeholder="Password" onkeydown="if(event.key==='Enter')confirmPw()">
+    <div class="modal-error" id="pw-error"></div>
+    <button class="btn-full" onclick="confirmPw()">Confirm</button>
+    <button class="btn-full btn-cancel" onclick="cancelPw()">Cancel</button>
+  </div>
+</div>
+
 <header>
   <a href="#" class="logo">
-    <svg class="logo-star" viewBox="0 0 28 28" fill="none">
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
       <polygon points="14,2 17.5,10 26,10.5 20,16.5 22,25 14,20.5 6,25 8,16.5 2,10.5 10.5,10" fill="#FFD700"/>
       <circle cx="14" cy="14" r="4" fill="#080b14"/>
       <circle cx="14" cy="14" r="2" fill="#00D4FF"/>
@@ -565,7 +192,26 @@ footer strong { color: var(--gold); }
     <li><a href="#history">History</a></li>
     <li><a href="#milestones">Milestones</a></li>
   </ul>
+  <div class="sync-indicator">
+    <div class="sync-dot" id="sync-dot"></div>
+    <span id="sync-label">Not connected</span>
+  </div>
 </header>
+
+<!-- SETUP BANNER -->
+<div class="setup-banner" id="setup-banner">
+  <div class="setup-icon">⚙️</div>
+  <div class="setup-text">
+    <div class="setup-title">Firebase setup needed — takes 5 minutes</div>
+    <div class="setup-body">
+      1. Go to <a href="https://console.firebase.google.com" target="_blank">console.firebase.google.com</a> → Create project (name it anything)<br>
+      2. Click <strong>Realtime Database</strong> → Create database → Start in <strong>test mode</strong><br>
+      3. Go to <strong>Project Settings ⚙️</strong> → Your apps → Add web app → Copy the config<br>
+      4. Open this <code>index.html</code> file in a text editor, find <code>PASTE_YOUR_FIREBASE_CONFIG_HERE</code> and replace the whole <code>firebaseConfig</code> object with your config.<br>
+      5. Save the file, re-upload to GitHub — done! Data now syncs across all devices.
+    </div>
+  </div>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -574,90 +220,48 @@ footer strong { color: var(--gold); }
   <p class="hero-eyebrow">Fortnite pacifist tracker</p>
   <h1 class="hero-title">Shigley's<br><span>No-Kill</span> Streak</h1>
   <p class="hero-sub">Zero eliminations. Maximum dignity. Every match counts.</p>
-
   <div class="hero-streak-display">
     <div class="hero-streak-label">Current streak</div>
     <div class="hero-streak-num" id="hero-num">0</div>
     <div class="hero-streak-unit">matches without a kill</div>
-    <div class="rank-badge rank-gray" id="rank-badge">
-      <span>&#9733;</span>
-      <span id="rank-name">Unranked</span>
-    </div>
+    <div class="rank-badge rank-gray" id="rank-badge">&#9733; <span id="rank-name">Unranked</span></div>
     <div class="progress-section">
       <div class="progress-meta">
         <span id="prog-left">0 matches</span>
         <span id="prog-right">Next rank: 1</span>
       </div>
-      <div class="progress-track">
-        <div class="progress-fill" id="prog-fill" style="width:0%"></div>
-      </div>
+      <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
     </div>
   </div>
 </section>
 
 <main>
-
-  <!-- STATS -->
-  <div class="stats-row" id="stats-row">
-    <div class="stat-card accent-gold">
-      <div class="stat-card-icon">&#127942;</div>
-      <div class="stat-card-val" id="st-streak">0</div>
-      <div class="stat-card-lbl">Current streak</div>
-    </div>
-    <div class="stat-card accent-gold">
-      <div class="stat-card-icon">&#128081;</div>
-      <div class="stat-card-val" id="st-best">0</div>
-      <div class="stat-card-lbl">Best streak</div>
-    </div>
-    <div class="stat-card accent-green">
-      <div class="stat-card-icon">&#9989;</div>
-      <div class="stat-card-val" id="st-clean">0</div>
-      <div class="stat-card-lbl">Clean matches</div>
-    </div>
-    <div class="stat-card accent-red">
-      <div class="stat-card-icon">&#128128;</div>
-      <div class="stat-card-val" id="st-kills">0</div>
-      <div class="stat-card-lbl">Times killed</div>
-    </div>
-    <div class="stat-card accent-blue">
-      <div class="stat-card-icon">&#127775;</div>
-      <div class="stat-card-val" id="st-pct">0%</div>
-      <div class="stat-card-lbl">Clean rate</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-card-icon">&#127918;</div>
-      <div class="stat-card-val" id="st-total">0</div>
-      <div class="stat-card-lbl">Total matches</div>
-    </div>
+  <div class="stats-row">
+    <div class="stat-card accent-gold"><div class="stat-card-icon">🏅</div><div class="stat-card-val" id="st-streak">0</div><div class="stat-card-lbl">Current streak</div></div>
+    <div class="stat-card accent-gold"><div class="stat-card-icon">👑</div><div class="stat-card-val" id="st-best">0</div><div class="stat-card-lbl">Best streak</div></div>
+    <div class="stat-card accent-green"><div class="stat-card-icon">✅</div><div class="stat-card-val" id="st-clean">0</div><div class="stat-card-lbl">Clean matches</div></div>
+    <div class="stat-card accent-red"><div class="stat-card-icon">💀</div><div class="stat-card-val" id="st-kills">0</div><div class="stat-card-lbl">Times killed</div></div>
+    <div class="stat-card accent-blue"><div class="stat-card-icon">🌟</div><div class="stat-card-val" id="st-pct">0%</div><div class="stat-card-lbl">Clean rate</div></div>
+    <div class="stat-card"><div class="stat-card-icon">🎮</div><div class="stat-card-val" id="st-total">0</div><div class="stat-card-lbl">Total matches</div></div>
   </div>
 
-  <!-- CHART + LOG FORM -->
   <div class="two-col">
-
-    <!-- CHART -->
     <div class="card">
-      <div class="card-title">&#9641; Last 10 matches</div>
-      <div class="chart-bars" id="chart-bars">
-        <div class="empty-state" style="flex:1;padding:0.5rem 0">No matches yet</div>
-      </div>
+      <div class="card-title">▐ Last 10 matches</div>
+      <div class="chart-bars" id="chart-bars"><div class="empty-state" style="flex:1;padding:0.5rem 0">No matches yet</div></div>
       <div class="chart-legend">
-        <span style="font-size:12px;color:var(--text-muted);display:flex;align-items:center;">
-          <span class="legend-dot" style="background:var(--gold)"></span> No kill
-        </span>
-        <span style="font-size:12px;color:var(--text-muted);display:flex;align-items:center;">
-          <span class="legend-dot" style="background:var(--red)"></span> Kill
-        </span>
+        <span style="font-size:12px;color:var(--text-muted);display:flex;align-items:center;"><span style="width:10px;height:10px;background:var(--gold);border-radius:2px;display:inline-block;margin-right:5px"></span> No kill</span>
+        <span style="font-size:12px;color:var(--text-muted);display:flex;align-items:center;"><span style="width:10px;height:10px;background:var(--red);border-radius:2px;display:inline-block;margin-right:5px"></span> Kill</span>
       </div>
     </div>
 
-    <!-- LOG FORM -->
     <div class="card" id="log">
-      <div class="card-title">&#43; Log a match</div>
+      <div class="card-title">+ Log a match</div>
       <div class="form-grid">
         <div>
           <div class="field-label">Placement</div>
           <select id="sel-placement">
-            <option value="vr">&#127942; Victory Royale</option>
+            <option value="vr">🏆 Victory Royale</option>
             <option value="2">2nd place</option>
             <option value="3">3rd place</option>
             <option value="top5">Top 5</option>
@@ -684,48 +288,54 @@ footer strong { color: var(--gold); }
         <input type="text" id="inp-note" placeholder="e.g. hid in a bush the whole game" maxlength="80">
       </div>
       <div class="btn-row">
-        <button class="btn btn-gold" onclick="addMatch()">
-          &#9654; Add no-kill match
-        </button>
-        <button class="btn btn-red" onclick="logKill()">
-          &#128128; Got a kill
-        </button>
+        <button class="btn btn-gold" onclick="requirePw('clean')">▶ Add no-kill match</button>
+        <button class="btn btn-red" onclick="requirePw('kill')">💀 Got a kill</button>
       </div>
     </div>
-
   </div>
 
-  <!-- HISTORY -->
   <div class="card" style="margin-bottom:1.5rem;" id="history">
-    <div class="card-title">&#9776; Match history</div>
+    <div class="card-title">☰ Match history</div>
     <div class="log-filters">
       <button class="filter-pill active" onclick="setFilter('all',this)">All</button>
       <button class="filter-pill" onclick="setFilter('clean',this)">No-kill</button>
       <button class="filter-pill" onclick="setFilter('kill',this)">Kills</button>
     </div>
-    <div id="log-list">
-      <div class="empty-state">
-        <div class="empty-icon">&#127918;</div>
-        No matches logged yet. Start your streak above!
-      </div>
-    </div>
+    <div id="log-list"><div class="empty-state"><div class="empty-icon">🎮</div>No matches logged yet. Start your streak above!</div></div>
   </div>
 
-  <!-- MILESTONES -->
   <div class="card" id="milestones">
-    <div class="card-title">&#127942; Milestones</div>
+    <div class="card-title">🏆 Milestones</div>
     <div id="milestones-list"></div>
   </div>
-
 </main>
 
-<footer>
-  Built for <strong>Shigley</strong> &mdash; the greatest pacifist Fortnite has ever seen.
-</footer>
-
+<footer>Built for <strong>Shigley</strong> &mdash; the greatest pacifist Fortnite has ever seen.</footer>
 <div id="toast"></div>
 
+<!-- FIREBASE SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
 <script>
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// STEP 1: Paste your Firebase config here
+// Replace the entire object below with YOUR config
+// from Firebase Console → Project Settings → Your apps
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const firebaseConfig = "PASTE_YOUR_FIREBASE_CONFIG_HERE";
+// Example of what it should look like after you paste:
+// const firebaseConfig = {
+//   apiKey: "AIzaSy...",
+//   authDomain: "your-app.firebaseapp.com",
+//   databaseURL: "https://your-app-default-rtdb.firebaseio.com",
+//   projectId: "your-app",
+//   storageBucket: "your-app.appspot.com",
+//   messagingSenderId: "123456789",
+//   appId: "1:123:web:abc123"
+// };
+
+const PASSWORD = "ana-elshigleyy";
 const RANKS = [
   { name: 'Unranked', min: 0, cls: 'rank-gray' },
   { name: 'Bronze pacifist', min: 1, cls: 'rank-gray' },
@@ -745,52 +355,114 @@ const MILESTONES = [
 ];
 
 let state = { streak: 0, best: 0, total: 0, clean: 0, kills: 0, log: [], filter: 'all' };
+let db = null;
+let pendingAction = null;
 
-function load() {
+// ── FIREBASE INIT ──
+function initFirebase() {
+  if (typeof firebaseConfig !== 'object' || firebaseConfig === "PASTE_YOUR_FIREBASE_CONFIG_HERE") {
+    setSyncStatus('error', 'Local only — add Firebase config');
+    document.getElementById('setup-banner').classList.remove('hidden');
+    loadLocal();
+    return;
+  }
   try {
-    const raw = localStorage.getItem('shigley_website_v1');
-    if (raw) state = { filter: 'all', ...JSON.parse(raw) };
-  } catch(e) {}
+    firebase.initializeApp(firebaseConfig);
+    db = firebase.database();
+    document.getElementById('setup-banner').classList.add('hidden');
+    setSyncStatus('syncing', 'Connecting...');
+    db.ref('shigley/state').on('value', snap => {
+      const val = snap.val();
+      if (val) {
+        state = { filter: state.filter, ...val };
+      }
+      setSyncStatus('synced', 'Synced');
+      render();
+    }, err => {
+      setSyncStatus('error', 'Sync error');
+      loadLocal();
+    });
+  } catch(e) {
+    setSyncStatus('error', 'Config error');
+    document.getElementById('setup-banner').classList.remove('hidden');
+    loadLocal();
+  }
+}
+
+function saveToFirebase() {
+  if (!db) { saveLocal(); return; }
+  setSyncStatus('syncing', 'Saving...');
+  const { filter, ...toSave } = state;
+  db.ref('shigley/state').set(toSave)
+    .then(() => setSyncStatus('synced', 'Saved'))
+    .catch(() => { setSyncStatus('error', 'Save failed'); saveLocal(); });
+}
+
+function setSyncStatus(status, label) {
+  const dot = document.getElementById('sync-dot');
+  const lbl = document.getElementById('sync-label');
+  dot.className = 'sync-dot ' + status;
+  lbl.textContent = label;
+}
+
+function loadLocal() {
+  try { const r = localStorage.getItem('shigley_v2'); if (r) state = { filter: 'all', ...JSON.parse(r) }; } catch(e) {}
   render();
 }
-function save() {
-  try { localStorage.setItem('shigley_website_v1', JSON.stringify(state)); } catch(e) {}
+function saveLocal() {
+  try { localStorage.setItem('shigley_v2', JSON.stringify(state)); } catch(e) {}
 }
 
-function toast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 2200);
+// ── PASSWORD ──
+function requirePw(action) {
+  pendingAction = action;
+  const modal = document.getElementById('pw-modal');
+  const icon = document.getElementById('pw-modal-icon');
+  const title = document.getElementById('pw-modal-title');
+  const sub = document.getElementById('pw-modal-sub');
+  if (action === 'clean') {
+    icon.textContent = '🛡';
+    title.textContent = 'Add no-kill match';
+    sub.textContent = 'Enter the password to log a clean match.';
+  } else {
+    icon.textContent = '💀';
+    title.textContent = 'Log a kill';
+    sub.textContent = 'Enter the password to record a kill.';
+  }
+  document.getElementById('pw-error').textContent = '';
+  document.getElementById('pw-input').value = '';
+  modal.classList.remove('hidden');
+  setTimeout(() => document.getElementById('pw-input').focus(), 50);
 }
 
-function bump() {
-  const el = document.getElementById('hero-num');
-  el.classList.remove('bump');
-  void el.offsetWidth;
-  el.classList.add('bump');
-  setTimeout(() => el.classList.remove('bump'), 250);
+function confirmPw() {
+  const val = document.getElementById('pw-input').value;
+  const inp = document.getElementById('pw-input');
+  if (val !== PASSWORD) {
+    document.getElementById('pw-error').textContent = 'Wrong password. Try again.';
+    inp.classList.add('wrong');
+    setTimeout(() => inp.classList.remove('wrong'), 400);
+    inp.value = '';
+    inp.focus();
+    return;
+  }
+  document.getElementById('pw-modal').classList.add('hidden');
+  if (pendingAction === 'clean') doAddMatch();
+  else if (pendingAction === 'kill') doLogKill();
+  pendingAction = null;
 }
 
-function placementLabel(v) {
-  if (v === 'vr') return 'Victory Royale';
-  if (v === 'top5') return 'Top 5';
-  if (v === 'top10') return 'Top 10';
-  if (v === 'top25') return 'Top 25';
-  if (v === 'other') return 'Eliminated';
-  return v + 'nd/rd place';
-}
-function placementTag(v) {
-  if (v === 'vr') return 'tag-vr';
-  if (v === '2' || v === '3' || v === 'top5') return 'tag-top';
-  return 'tag-other';
+function cancelPw() {
+  document.getElementById('pw-modal').classList.add('hidden');
+  pendingAction = null;
 }
 
+// ── ACTIONS ──
 function dateStr() {
   return new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
 }
 
-function addMatch() {
+function doAddMatch() {
   const pl = document.getElementById('sel-placement').value;
   const mo = document.getElementById('sel-mode').value;
   const note = document.getElementById('inp-note').value.trim();
@@ -799,23 +471,24 @@ function addMatch() {
   state.total++;
   state.clean++;
   if (state.streak > state.best) state.best = state.streak;
-  state.log.unshift({ type: 'clean', match: state.total, streak: state.streak, placement: pl, mode: mo, note, date: dateStr() });
-  if (state.log.length > 100) state.log.pop();
-  save(); render(); bump();
+  state.log = [{ type: 'clean', match: state.total, streak: state.streak, placement: pl, mode: mo, note, date: dateStr() }, ...state.log].slice(0, 100);
+  saveToFirebase();
+  render();
+  bump();
   toast('Match logged — streak: ' + state.streak);
 }
 
-function logKill() {
+function doLogKill() {
   const pl = document.getElementById('sel-placement').value;
   const mo = document.getElementById('sel-mode').value;
   const note = document.getElementById('inp-note').value.trim();
   document.getElementById('inp-note').value = '';
   state.kills++;
   state.total++;
-  state.log.unshift({ type: 'kill', match: state.total, streak: state.streak, placement: pl, mode: mo, note, date: dateStr() });
-  if (state.log.length > 100) state.log.pop();
+  state.log = [{ type: 'kill', match: state.total, streak: state.streak, placement: pl, mode: mo, note, date: dateStr() }, ...state.log].slice(0, 100);
   state.streak = 0;
-  save(); render();
+  saveToFirebase();
+  render();
   toast('Streak reset. Shigley slipped...');
 }
 
@@ -826,15 +499,21 @@ function setFilter(f, btn) {
   renderLog();
 }
 
-function getRank(n) {
-  let r = RANKS[0];
-  for (const rk of RANKS) if (n >= rk.min) r = rk;
-  return r;
+// ── RENDER ──
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2200);
 }
-function getNextRank(n) {
-  for (const rk of RANKS) if (rk.min > n) return rk;
-  return null;
+function bump() {
+  const el = document.getElementById('hero-num');
+  el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump');
+  setTimeout(() => el.classList.remove('bump'), 250);
 }
+function getRank(n) { let r = RANKS[0]; for (const rk of RANKS) if (n >= rk.min) r = rk; return r; }
+function getNextRank(n) { for (const rk of RANKS) if (rk.min > n) return rk; return null; }
+function plLabel(v) { if (v==='vr') return 'Victory Royale'; if (v==='top5') return 'Top 5'; if (v==='top10') return 'Top 10'; if (v==='top25') return 'Top 25'; if (v==='other') return 'Eliminated'; return v+'nd/rd'; }
+function plTag(v) { if (v==='vr') return 'tag-vr'; if (v==='2'||v==='3'||v==='top5') return 'tag-top'; return 'tag-other'; }
 
 function render() {
   document.getElementById('hero-num').textContent = state.streak;
@@ -843,15 +522,12 @@ function render() {
   document.getElementById('st-clean').textContent = state.clean;
   document.getElementById('st-kills').textContent = state.kills;
   document.getElementById('st-total').textContent = state.total;
-  const pct = state.total > 0 ? Math.round(state.clean / state.total * 100) : 0;
-  document.getElementById('st-pct').textContent = pct + '%';
-
+  document.getElementById('st-pct').textContent = state.total > 0 ? Math.round(state.clean / state.total * 100) + '%' : '0%';
   const rank = getRank(state.streak);
   const next = getNextRank(state.streak);
   const badge = document.getElementById('rank-badge');
   badge.className = 'rank-badge ' + rank.cls;
   document.getElementById('rank-name').textContent = rank.name;
-
   if (next) {
     const pf = rank.min === next.min ? 0 : Math.min(100, Math.round((state.streak - rank.min) / (next.min - rank.min) * 100));
     document.getElementById('prog-left').textContent = state.streak + ' matches';
@@ -862,54 +538,37 @@ function render() {
     document.getElementById('prog-right').textContent = 'Legend';
     document.getElementById('prog-fill').style.width = '100%';
   }
-
-  renderChart();
-  renderLog();
-  renderMilestones();
+  renderChart(); renderLog(); renderMilestones();
 }
 
 function renderChart() {
   const el = document.getElementById('chart-bars');
-  const last = state.log.slice(0, 10).reverse();
-  if (last.length === 0) {
-    el.innerHTML = '<div class="empty-state" style="flex:1;padding:0.5rem 0">No matches yet</div>';
-    return;
-  }
-  const maxH = 70;
-  el.innerHTML = last.map(m => {
-    const isKill = m.type === 'kill';
-    return `<div class="chart-bar-wrap">
-      <div class="chart-bar ${isKill ? 'type-kill' : 'type-clean'}" style="height:${maxH}px" title="${isKill ? 'Kill' : 'No kill'} — #${m.match}"></div>
-      <span class="chart-bar-lbl">#${m.match}</span>
-    </div>`;
-  }).join('');
+  const last = (state.log || []).slice(0, 10).reverse();
+  if (!last.length) { el.innerHTML = '<div class="empty-state" style="flex:1;padding:0.5rem 0">No matches yet</div>'; return; }
+  el.innerHTML = last.map(m => `<div class="chart-bar-wrap">
+    <div class="chart-bar ${m.type==='kill'?'type-kill':'type-clean'}" style="height:70px" title="${m.type==='kill'?'Kill':'No kill'} — #${m.match}"></div>
+    <span class="chart-bar-lbl">#${m.match}</span>
+  </div>`).join('');
 }
 
 function renderLog() {
   const el = document.getElementById('log-list');
-  let items = state.log;
+  let items = state.log || [];
   if (state.filter === 'clean') items = items.filter(m => m.type === 'clean');
   if (state.filter === 'kill') items = items.filter(m => m.type === 'kill');
-  if (items.length === 0) {
-    el.innerHTML = '<div class="empty-state"><div class="empty-icon">&#127918;</div>No matches to show.</div>';
-    return;
-  }
+  if (!items.length) { el.innerHTML = '<div class="empty-state"><div class="empty-icon">🎮</div>No matches to show.</div>'; return; }
   el.innerHTML = items.map(m => {
     const isKill = m.type === 'kill';
-    const plTag = placementTag(m.placement || 'other');
-    const plLabel = placementLabel(m.placement || 'other');
     return `<div class="log-entry">
-      <div class="log-icon-wrap ${isKill ? 'log-icon-kill' : 'log-icon-clean'}">
-        ${isKill ? '💀' : '🛡'}
-      </div>
+      <div class="log-icon-wrap ${isKill?'log-icon-kill':'log-icon-clean'}">${isKill?'💀':'🛡'}</div>
       <div class="log-body">
-        <div class="log-main-text">${isKill ? 'Kill — streak reset' : 'No-kill match'}</div>
-        <div class="log-meta-text">${m.mode || 'Squads'} &nbsp;·&nbsp; ${m.date || ''}</div>
-        ${m.note ? `<div class="log-meta-text" style="color:var(--text-muted);font-style:italic;">"${m.note}"</div>` : ''}
-        <span class="placement-tag ${plTag}">${plLabel}</span>
+        <div class="log-main-text">${isKill?'Kill — streak reset':'No-kill match'}</div>
+        <div class="log-meta-text">${m.mode||'Squads'} &nbsp;·&nbsp; ${m.date||''}</div>
+        ${m.note?`<div class="log-meta-text" style="font-style:italic">"${m.note}"</div>`:''}
+        <span class="placement-tag ${plTag(m.placement||'other')}">${plLabel(m.placement||'other')}</span>
       </div>
       <div class="log-right">
-        <div class="log-streak-num">${isKill ? '0' : m.streak}</div>
+        <div class="log-streak-num">${isKill?'0':m.streak}</div>
         <div class="log-match-num">Match #${m.match}</div>
       </div>
     </div>`;
@@ -917,21 +576,17 @@ function renderLog() {
 }
 
 function renderMilestones() {
-  const el = document.getElementById('milestones-list');
-  el.innerHTML = MILESTONES.map(ms => {
-    const done = state.best >= ms.req;
-    return `<div class="milestone-item ${done ? '' : 'locked'}">
-      <div class="ms-icon-wrap ${done ? 'ms-unlocked' : 'ms-locked'}">${ms.icon}</div>
-      <div>
-        <div class="ms-name">${ms.label}</div>
-        <div class="ms-req">${ms.detail} &nbsp;&middot;&nbsp; ${ms.req} match${ms.req > 1 ? 'es' : ''}</div>
-      </div>
-      <div class="ms-check ${done ? 'done' : 'todo'}">${done ? '✓' : '○'}</div>
+  document.getElementById('milestones-list').innerHTML = MILESTONES.map(ms => {
+    const done = (state.best||0) >= ms.req;
+    return `<div class="milestone-item ${done?'':'locked'}">
+      <div class="ms-icon-wrap ${done?'ms-unlocked':'ms-locked'}">${ms.icon}</div>
+      <div><div class="ms-name">${ms.label}</div><div class="ms-req">${ms.detail} · ${ms.req} match${ms.req>1?'es':''}</div></div>
+      <div class="ms-check ${done?'done':'todo'}">${done?'✓':'○'}</div>
     </div>`;
   }).join('');
 }
 
-load();
+initFirebase();
 </script>
 </body>
 </html>
