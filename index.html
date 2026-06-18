@@ -198,21 +198,6 @@ footer strong { color: var(--gold); }
   </div>
 </header>
 
-<!-- SETUP BANNER -->
-<div class="setup-banner" id="setup-banner">
-  <div class="setup-icon">⚙️</div>
-  <div class="setup-text">
-    <div class="setup-title">Firebase setup needed — takes 5 minutes</div>
-    <div class="setup-body">
-      1. Go to <a href="https://console.firebase.google.com" target="_blank">console.firebase.google.com</a> → Create project (name it anything)<br>
-      2. Click <strong>Realtime Database</strong> → Create database → Start in <strong>test mode</strong><br>
-      3. Go to <strong>Project Settings ⚙️</strong> → Your apps → Add web app → Copy the config<br>
-      4. Open this <code>index.html</code> file in a text editor, find <code>PASTE_YOUR_FIREBASE_CONFIG_HERE</code> and replace the whole <code>firebaseConfig</code> object with your config.<br>
-      5. Save the file, re-upload to GitHub — done! Data now syncs across all devices.
-    </div>
-  </div>
-</div>
-
 <!-- HERO -->
 <section class="hero">
   <div class="hero-bg"></div>
@@ -323,7 +308,16 @@ footer strong { color: var(--gold); }
 // Replace the entire object below with YOUR config
 // from Firebase Console → Project Settings → Your apps
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-const firebaseConfig = "PASTE_YOUR_FIREBASE_CONFIG_HERE";
+const firebaseConfig = {
+  apiKey: "AIzaSyAhzGueprQF1L9UVEu-I91dlFuOvDuea_c",
+  authDomain: "shigleys-streak.firebaseapp.com",
+  databaseURL: "https://shigleys-streak-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "shigleys-streak",
+  storageBucket: "shigleys-streak.firebasestorage.app",
+  messagingSenderId: "318862340740",
+  appId: "1:318862340740:web:6737b60b2f255a14cbc8d1",
+  measurementId: "G-LT98PRNW39"
+};
 // Example of what it should look like after you paste:
 // const firebaseConfig = {
 //   apiKey: "AIzaSy...",
